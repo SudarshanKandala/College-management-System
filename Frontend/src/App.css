@@ -1,0 +1,35 @@
+#form{
+  color: black;
+}
+body{
+  background-color:rgb(184, 229, 247);
+  align-items: center;
+  
+}
+button{
+  background-color: rgb(212, 235, 196);
+}
+input{
+  background-color: antiquewhite;
+  color: black;
+}
+.main_heading{
+  color: black;
+}
+
+.navbar{
+  display: inline;
+  float: left;
+  padding: 4px;
+}
+
+table,th,td{
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 3px;
+}
+
+.division{
+  float: left;
+  width:33%;
+}
