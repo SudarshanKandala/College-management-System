@@ -17,6 +17,7 @@ import { authenticateJWT } from './routes/login.js';
 import session from "express-session";
 import './passport-setup.js'; // import the strategy config
 import passport from "passport";
+import dotenv from 'dotenv';
 
 const app = express();
 app.use(cors({
@@ -34,6 +35,7 @@ app.use(session({
   saveUninitialized: true
 }));
 
+dotenv.config({path: '../.env'});
 app.use(passport.initialize());
 app.use(passport.session());
 
