@@ -14,7 +14,7 @@ import Teacher_1 from './Teacher_1';
 import Admin_login from './Admin_login';
 import Student_login from './Student_login';
 import Teacher_login from './Teacher_login';
-import Navbar from './navbar';
+import Navbar from './Navbar';
 
 
 function Display() {

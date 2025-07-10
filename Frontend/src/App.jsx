@@ -1,12 +1,12 @@
 // import './App.css';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import Display from './Display';
-import { Route, Routes } from 'react-router-dom';
+// import { Route, Routes } from 'react-router-dom';
 import { useState,useEffect } from 'react';
-import { useRef } from 'react';
-import axios from 'axios';
-import { token } from './Home';
-import Navbar from './navbar';
+// import { useRef } from 'react';
+// import axios from 'axios';
+// import { token } from './Home';
+import Navbar from './Navbar';
 
 function App() {
   const [login,setlogin] = useState("");

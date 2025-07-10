@@ -3,10 +3,10 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { token } from './Home';
-import { AuthContext } from './context/AuthProvider';
+// import { AuthContext } from '../src/context/Authprovider.jsx'; // Import AuthContext
 import { useNavigate } from 'react-router-dom';
 function Admin() {
-  const {accessToken} = useContext(AuthContext);
+  // const {accessToken} = useContext(AuthContext);
   const navigate = useNavigate(); // Initialize useNavigate hook
   // Logout function
   const [payload,setpayload] = useState();
@@ -19,61 +19,61 @@ function Admin() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/instructor')
+      .get('http://localhost:8080/instructor',{withCredentials: true})
       .then((response) => setinstdata(response.data))
       .catch((error) => console.log('Error fetching data: ', error));
-  },[accessToken]);
+  },[payload]);
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/department')
+      .get('http://localhost:8080/department',{withCredentials: true})
       .then((response) => setdept(response.data))
       .catch((error) => console.log('Error fetching data: ', error));
-  },[accessToken]);
+  },[payload]);
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/students')
+      .get('http://localhost:8080/students',{withCredentials: true})
       .then((response) => setstu(response.data))
       .catch((error) => console.log('Error fetching data: ', error));
-  },[accessToken]);
+  },[payload]);
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/Courses')
+      .get('http://localhost:8080/Courses',{withCredentials: true})
       .then((response) => setcourse(response.data))
       .catch((error) => console.log('Error fetching data: ', error));
-  },[accessToken]); 
+  },[payload]); 
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/stucour')
+      .get('http://localhost:8080/stucour',{withCredentials: true})
       .then((response) => setstucour(response.data))
       .catch((error) => console.log('Error fetching data: ', error));
-  },[accessToken]);
+  },[payload]);
 
   useEffect(() => {
-    if (!accessToken) return; // If no token, don't fetch
     axios
-      .get("http://localhost:8080/decode_token", {
-        headers: { Authorization: `Bearer ${accessToken}`},
+      .get("http://localhost:8080/profile", {
+        withCredentials: true // 🧠 important to include cookies
       })
       .then((res) => {
-        setpayload(res.data); // Set the user data
+        setpayload(res.data); // ← decoded user info from req.user
       })
       .catch((err) => {
-        console.log("Error decoding token: ", err);
-        // Handle token decoding failure (e.g., navigate to login or handle state)
+        console.log("User not authenticated:", err);
+        // Optional: redirect to login or clear UI
       });
-  }, [accessToken]); 
+  }, []);
+
 
   useEffect(() => {
-    if (!accessToken) return; 
+    if (!payload) return; 
     axios
-      .get('http://localhost:8080/admindata')
+      .get('http://localhost:8080/admindata',{withCredentials: true})
       .then((response) => setadmin(response.data))
       .catch((error) => console.log('Error fetching data: ', error));
-  }, [accessToken]);
+  }, [payload]);
   
 
   return (

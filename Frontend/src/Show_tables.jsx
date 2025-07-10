@@ -15,35 +15,35 @@ function Show_tables() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/instructor')
+      .get('http://localhost:8080/instructor',{withCredentials: true})
       .then((response) => setinstdata(response.data))
       .catch((error) => console.log('Error fetching data: ', error));
   }, []);
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/department')
+      .get('http://localhost:8080/department',{withCredentials: true})
       .then((response) => setdept(response.data))
       .catch((error) => console.log('Error fetching data: ', error));
   }, []);
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/students')
+      .get('http://localhost:8080/students',{withCredentials: true})
       .then((response) => setstu(response.data))
       .catch((error) => console.log('Error fetching data: ', error));
   }, []);
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/Courses')
+      .get('http://localhost:8080/Courses',{withCredentials: true})
       .then((response) => setcourse(response.data))
       .catch((error) => console.log('Error fetching data: ', error));
   }, []);
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/stucour')
+      .get('http://localhost:8080/stucour',{withCredentials: true})
       .then((response) => setstucour(response.data))
       .catch((error) => console.log('Error fetching data: ', error));
   }, []);
@@ -171,6 +171,7 @@ function Show_tables() {
         ))}
       </tbody>
     </table>
+    <br />
   </div>
 </div>
 

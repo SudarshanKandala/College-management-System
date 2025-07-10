@@ -1,59 +1,53 @@
 import db from "../databaseconn/college.js";
 import express from "express";
+import { authenticateJWT, authorizeRole } from './login.js';
 const router = express.Router();
 
-router.get("/department", (req, res) => {
-    const sql = "SELECT * FROM DEPARTMENT ORDER BY DepartnemtID";
-    db.query(sql, (err, data) => {
-      if (err) {
-        return res.json(err);
-      }
-      return res.json(data);
-    });
-  });
-  
-  router.post("/department",(req,res) => {
-    const { dptid,dptname } = req.body;
-    db.query(
-      "INSERT INTO department (DepartnemtID,DepartmentName,HeadID) VALUES (?,?,?)",
-      [dptid,dptname,null],
-      (err, result) => {
-        if (err) {
-          return res.status(500).json(err);
-        }
-        res.json({
-          dptid,
-          dptname
-        });
-      }
-    );
-  });
-  
-  router.post("/deldept",(req,res)=>{
-    const {deptid,courarr,stuarr,deptname}=req.body;
-    console.log(stuarr);
-    db.query("DELETE FROM department WHERE DepartnemtID=?",[deptid],(err,result)=>{
-      if(err)
-        res.status(500).json(err);
-    });
-    db.query("DELETE FROM course WHERE DepartmentID=?",[deptid],(err,result)=>{
-      if(err)
-        res.status(500).json(err);
-    });
-    db.query("DELETE FROM instructor WHERE DepartmentID=?",[deptid],(err,result)=>{
-      if(err)
-        res.status(500).json(err);
-    });
-    db.query("DELETE FROM student WHERE BranchName=?",[deptname],(err,result)=>{
-      if(err)
-        res.status(500).json(err);
-    });
-    courarr.map((c)=>{
-      db.query("DELETE FROM StudentVsCourses WHERE CourseID=?",[c]);
-    });
-    stuarr.map((s)=>{
-      db.query("DELETE FROM StudentVsCourses WHERE StudentNumber=?",[s]);
-    });
-  });
+// Get all departments
+router.get("/department", authenticateJWT, authorizeRole(["Admin", "Student", "Teacher"]), async (req, res) => {
+  try {
+    const [data] = await db.query("SELECT * FROM department ORDER BY DepartnemtID");
+    return res.json(data);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
 
-  export default router;
+// Add a new department
+router.post("/department", authenticateJWT, authorizeRole(["Admin"]), async (req, res) => {
+  const { dptid, dptname } = req.body;
+  try {
+    await db.query(
+      "INSERT INTO department (DepartnemtID, DepartmentName, HeadID) VALUES (?, ?, ?)",
+      [dptid, dptname, null]
+    );
+    res.json({
+      dptid,
+      dptname
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// Delete department and related data
+router.post("/deldept", authenticateJWT, authorizeRole(["Admin"]), async (req, res) => {
+  const { deptid, courarr, stuarr, deptname } = req.body;
+  try {
+    await db.query("DELETE FROM department WHERE DepartnemtID=?", [deptid]);
+    await db.query("DELETE FROM course WHERE DepartmentID=?", [deptid]);
+    await db.query("DELETE FROM instructor WHERE DepartmentID=?", [deptid]);
+    await db.query("DELETE FROM student WHERE BranchName=?", [deptname]);
+    for (const c of courarr) {
+      await db.query("DELETE FROM studentvscourses WHERE CourseID=?", [c]);
+    }
+    for (const s of stuarr) {
+      await db.query("DELETE FROM studentvscourses WHERE StudentNumber=?", [s]);
+    }
+    res.json({ message: "Department and related data deleted successfully" });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+export default router;

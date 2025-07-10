@@ -1,63 +1,67 @@
 import db from "../databaseconn/college.js";
 import express from "express";
+import { authenticateJWT, authorizeRole } from './login.js';
 const router = express.Router();
 
-  router.get("/Courses", (req, res) => {
-    const sql = "SELECT * FROM COURSE ORDER BY CourseID";
-    db.query(sql, (err, data) => {
-      if (err) {
-        return res.json(err);
-      }
-      return res.json(data);
-    });
-  });
-  
-  router.post("/Courses", (req, res) => {
-    const { courseid, coursename, instid, deptid } = req.body;
-    db.query(
+// Get all courses
+router.get("/Courses", authenticateJWT, authorizeRole(["Admin", "Student", "Teacher"]), async (req, res) => {
+  try {
+    const [data] = await db.query("SELECT * FROM course ORDER BY CourseID");
+    return res.json(data);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// Add a new course
+router.post("/Courses", authenticateJWT, authorizeRole(["Admin"]), async (req, res) => {
+  const { courseid, coursename, instid, deptid } = req.body;
+  try {
+    await db.query(
       "INSERT INTO course (CourseID, CourseName, InstructorID, DepartmentID) VALUES (?, ?, ?, ?)",
-      [courseid, coursename, instid, deptid],
-      (err, result) => {
-        if (err) {
-          return res.status(500).json(err);
-        }
-        res.json({
-          courseid,
-          coursename,
-          instid,
-          deptid
-        });
-      }
+      [courseid, coursename, instid, deptid]
     );
-  });
-  
-  router.post('/updatecourinst',(req,res)=>{
-    const {newins,courid} = req.body;
-    db.query("UPDATE course SET InstructorID=? WHERE CourseID=?",[newins,courid],(err,result)=>{
-      if(err)
-        return res.status(500).json(err);
-      res.json({newins,courid});
+    res.json({
+      courseid,
+      coursename,
+      instid,
+      deptid
     });
-  });
-  
-  router.post("/deletecourse",(req,res) => {
-    const {cid}=req.body;
-    console.log(cid);
-    db.query("DELETE FROM course WHERE CourseID=?",[cid],(err,result) => {
-      if(err)
-        return res.status(500).json(err);
-      res.json({id:result.cid});
-    });
-  });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
 
-  router.get("/admindata", (req, res) => {
-    const sql = "SELECT * FROM admin ORDER BY AdminID";
-    db.query(sql, (err, data) => {
-      if (err) {
-        return res.json(err);
-      }
-      return res.json(data);
-    });
-  });
+// Update course instructor
+router.post('/updatecourinst', authenticateJWT, authorizeRole(["Admin"]), async (req, res) => {
+  const { newins, courid } = req.body;
+  try {
+    await db.query("UPDATE course SET InstructorID=? WHERE CourseID=?", [newins, courid]);
+    res.json({ newins, courid });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
 
-  export default router;
+// Delete a course
+router.post("/deletecourse", authenticateJWT, authorizeRole(["Admin"]), async (req, res) => {
+  const { cid } = req.body;
+  try {
+    await db.query("DELETE FROM course WHERE CourseID=?", [cid]);
+    res.json({ id: cid });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// Get all admin data
+router.get("/admindata", authenticateJWT, authorizeRole(["Admin"]), async (req, res) => {
+  try {
+    const [data] = await db.query("SELECT * FROM admin ORDER BY AdminID");
+    return res.json(data);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+export default router;

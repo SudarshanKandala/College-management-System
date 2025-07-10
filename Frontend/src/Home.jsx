@@ -11,52 +11,52 @@ import Show_tables from './Show_tables';
 import Student_1 from './Student_1';
 import Teacher_1 from './Teacher_1';
 import Admin from './Admin';
-import Navbar from './navbar';
-import { AuthContext } from './context/AuthProvider';
+import Navbar from './Navbar';
+// import { AuthContext } from '../src/context/Authprovider.jsx'; // Import AuthContext
 
 export const token = localStorage.getItem("your_JWT_Token");
 
 function Home() {
-  const [inst, setinstdata] = useState([]);
-  const [dept, setdept] = useState([]);
-  const [course, setcourse] = useState([]);
-  const [stu, setstu] = useState([]);
-  const [stucour, setstucour] = useState([]);
+  // const [inst, setinstdata] = useState([]);
+  // const [dept, setdept] = useState([]);
+  // const [course, setcourse] = useState([]);
+  // const [stu, setstu] = useState([]);
+  // const [stucour, setstucour] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get('http://localhost:8080/instructor')
-      .then((response) => setinstdata(response.data))
-      .catch((error) => console.log('Error fetching data: ', error));
-  },[token]);
+  // useEffect(() => {
+  //   axios
+  //     .get('http://localhost:8080/instructor',{withCredentials: true})
+  //     .then((response) => setinstdata(response.data))
+  //     .catch((error) => console.log('Error fetching data: ', error));
+  // },[token]);
 
-  useEffect(() => {
-    axios
-      .get('http://localhost:8080/department')
-      .then((response) => setdept(response.data))
-      .catch((error) => console.log('Error fetching data: ', error));
-  },[token]);
+  // useEffect(() => {
+  //   axios
+  //     .get('http://localhost:8080/department',{withCredentials: true})
+  //     .then((response) => setdept(response.data))
+  //     .catch((error) => console.log('Error fetching data: ', error));
+  // },[token]);
 
-  useEffect(() => {
-    axios
-      .get('http://localhost:8080/students')
-      .then((response) => setstu(response.data))
-      .catch((error) => console.log('Error fetching data: ', error));
-  },[token]);
+  // useEffect(() => {
+  //   axios
+  //     .get('http://localhost:8080/students',{withCredentials: true})
+  //     .then((response) => setstu(response.data))
+  //     .catch((error) => console.log('Error fetching data: ', error));
+  // },[token]);
 
-  useEffect(() => {
-    axios
-      .get('http://localhost:8080/Courses')
-      .then((response) => setcourse(response.data))
-      .catch((error) => console.log('Error fetching data: ', error));
-  },[token]); 
+  // useEffect(() => {
+  //   axios
+  //     .get('http://localhost:8080/Courses',{withCredentials: true})
+  //     .then((response) => setcourse(response.data))
+  //     .catch((error) => console.log('Error fetching data: ', error));
+  // },[token]); 
 
-  useEffect(() => {
-    axios
-      .get('http://localhost:8080/stucour')
-      .then((response) => setstucour(response.data))
-      .catch((error) => console.log('Error fetching data: ', error));
-  },[token]);
+  // useEffect(() => {
+  //   axios
+  //     .get('http://localhost:8080/stucour',{withCredentials: true})
+  //     .then((response) => setstucour(response.data))
+  //     .catch((error) => console.log('Error fetching data: ', error));
+  // },[token]);
 
   return (
     <>  
@@ -121,7 +121,7 @@ function Home() {
           {/* Faculty 1 */}
           <div className="bg-gray-900 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow text-center">
             <img 
-              src="https://testing.iiitn.ac.in/assets/images/director3.jpg" 
+              src="https://iiitn.ac.in/media/33e769aee57e4bec82ea3a2e412f9fe5.jpg" 
               alt="Dr. O. G. Kakde" 
               className="w-32 h-32 mx-auto rounded-full object-cover mb-4"
             />
@@ -132,7 +132,7 @@ function Home() {
           {/* Faculty 2 */}
           <div className="bg-gray-900 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow text-center">
             <img 
-              src="https://iiitn.ac.in/institute/director_img.jpg" 
+              src="https://iiitn.ac.in/media/9415183166f54042877500cf5b0ddeb6.jpg" 
               alt="Shri Kailas N. Dakhale" 
               className="w-32 h-32 mx-auto rounded-full object-cover mb-4"
             />
@@ -143,7 +143,7 @@ function Home() {
           {/* Faculty 3 */}
           <div className="bg-gray-900 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow text-center">
             <img 
-              src="https://iiitn.ac.in/27082024/Dr.%20Tausif%20Diwan.jpg" 
+              src="https://iiitn.ac.in/media/2a4a8a962bb94a0d82e5b5e4a883f037.jpg" 
               alt="Dr. Tausif Diwan" 
               className="w-32 h-32 mx-auto rounded-full object-cover mb-4"
             />

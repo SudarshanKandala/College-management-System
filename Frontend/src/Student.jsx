@@ -22,21 +22,21 @@ function Student() {
 
     useEffect(() => {
         axios
-          .get('http://localhost:8080/department')
+          .get('http://localhost:8080/department',{withCredentials: true})
           .then((response) => setdept(response.data))
           .catch((error) => console.log('Error fetching data: ', error));
       }, []);
 
       useEffect(() => {
         axios
-          .get('http://localhost:8080/students')
+          .get('http://localhost:8080/students',{withCredentials: true})
           .then((response) => setstu(response.data))
           .catch((error) => console.log('Error fetching data: ', error));
       }, []);
 
       useEffect(() => {
         axios
-          .get('http://localhost:8080/Courses')
+          .get('http://localhost:8080/Courses',{withCredentials: true})
           .then((response) => setcourse(response.data))
           .catch((error) => console.log('Error fetching data: ', error));
       }, []);
@@ -80,11 +80,11 @@ function Student() {
                 rollno:rollno,
                 dept:deptid,
                 pass:pass
-            });
+            },{withCredentials: true});
             const response1=await axios.post('http://localhost:8080/stucour',{
                 rollno:rollno,
                 courarr:courarr
-            });
+            },{withCredentials: true});
 
         }
         catch(error){
@@ -102,7 +102,7 @@ function Student() {
         try{
             const response=await axios.post('http://localhost:8080/studentdelete',{
                 stucourans:stucourans,
-            });
+            },{withCredentials: true});
             alert('Student deleted successfully!');
         }
         catch(error){
@@ -121,7 +121,7 @@ function Student() {
             const response= await axios.post('http://localhost:8080/updatename',{
                 new_name:new_name,
                 for_rollno:for_rollno
-            })
+            },{withCredentials: true})
             alert('name updated Successfully!');
         } catch (error) {
             console.error('Error updating name: ',error);
@@ -140,7 +140,7 @@ function Student() {
                 for_rollno1:for_rollno1,
                 deptid1:br_name.DepartmentName,
                 courarr1:courarr1
-            });
+            },{withCredentials: true});
             alert('Branch Updated Successfully!');
         } catch (error) {
             console.error('Error updating branch: ',error);
@@ -227,7 +227,7 @@ function Student() {
                         </div>
                         <button
                         type="submit"
-                        className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-2 px-4 rounded-md hover:bg-purple-600 transition duration-300 shadow-lg w-full"
+                        className="w-full bg-blue-800 text-white font-bold py-3 px-6 rounded-md hover:bg-purple-700 transition duration-300 ease-in-out shadow-lg text-xl"
                         >
                         Add Student
                         </button>
@@ -263,7 +263,7 @@ function Student() {
                             />
                             <button
                             type="submit"
-                            className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-2 px-4 rounded-md hover:bg-purple-600 transition duration-300 shadow-lg w-full mt-4"
+                            className="mt-4 w-full bg-blue-800 text-white font-bold py-3 px-6 rounded-md hover:bg-purple-700 transition duration-300 ease-in-out shadow-lg text-xl"
                             >
                             Update Name
                             </button>
@@ -326,7 +326,7 @@ function Student() {
                             </div>
                             <button
                             type="submit"
-                            className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-2 px-4 rounded-md hover:bg-purple-600 transition duration-300 shadow-lg w-full mt-4"
+                            className="mt-4 w-full bg-blue-800 text-white font-bold py-3 px-6 rounded-md hover:bg-purple-700 transition duration-300 ease-in-out shadow-lg text-xl"
                             >
                             Update Branch
                             </button>
@@ -351,8 +351,8 @@ function Student() {
                         className="w-full p-3 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
                     />
                     <button
-                        type="submit"
-                        className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-2 px-4 rounded-md hover:bg-purple-600 transition duration-300 shadow-lg w-full mt-4"
+                    type="submit"
+                    className="mt-4 w-full bg-blue-800 text-white font-bold py-3 px-6 rounded-md hover:bg-purple-700 transition duration-300 ease-in-out shadow-lg text-xl"
                     >
                         Delete Student
                     </button>

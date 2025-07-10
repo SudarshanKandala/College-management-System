@@ -18,14 +18,14 @@ function Teacher() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/instructor')
+      .get('http://localhost:8080/instructor',{withCredentials: true})
       .then((response) => setinstdata(response.data))
       .catch((error) => console.log('Error fetching data: ', error));
   }, []);
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/department')
+      .get('http://localhost:8080/department',{withCredentials: true})
       .then((response) => setdept(response.data))
       .catch((error) => console.log('Error fetching data: ', error));
   }, []);
@@ -60,7 +60,7 @@ function Teacher() {
         a_ishead: ishead,
         a_deptid: deptid,
         password : password
-      });
+      },{withCredentials: true});
       alert('Teacher added successfully!');
     } catch (error) {
       console.error('Error sending data: ', error);
@@ -87,7 +87,7 @@ function Teacher() {
       const response = await axios.post('http://localhost:8080/deletetea',{
         deltea:deltea,
         ishead:temp
-      });
+      },{withCredentials: true});
       alert("Instructor deleted successfully!");
     } catch (error) {
       console.log("error deleting teacher: ",error);
@@ -105,7 +105,7 @@ function Teacher() {
       const respnse = await axios.post("http://localhost:8080/updateteaname",{
         newname:up_name,
         id:for_id
-      });
+      },{withCredentials: true});
       alert('Name updated Successfully');
     } catch (error) {
       console.log("error updating name: ",error);
@@ -131,7 +131,7 @@ function Teacher() {
       const response = await axios.post("http://localhost:8080/updatehod",{
         newhod1:newhod.InstructorID,
         currhod1:currhod.HeadID
-      });
+      },{withCredentials: true});
       alert("HOD updated Successfully!");
     } catch (error) {
       console.log("error updating HOD: ",error);
@@ -219,7 +219,7 @@ function Teacher() {
             <div className="text-center">
               <button
                 type="submit"
-                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-xl py-3 px-6 rounded-md hover:bg-purple-600 transition duration-300 shadow-lg w-full"
+                className="w-full bg-blue-800 text-white font-bold py-3 px-6 rounded-md hover:bg-purple-700 transition duration-300 ease-in-out shadow-lg text-xl"
               >
                 Submit
               </button>
@@ -250,7 +250,7 @@ function Teacher() {
             <div className="text-center">
               <button
                 type="submit"
-                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-xl py-3 px-6 rounded-md hover:bg-purple-600 transition duration-300 shadow-lg w-full"
+                className="w-full bg-blue-800 text-white font-bold py-3 px-6 rounded-md hover:bg-purple-700 transition duration-300 ease-in-out shadow-lg text-xl"
               >
                 Delete Instructor
               </button>
@@ -291,7 +291,7 @@ function Teacher() {
               <div className="text-center">
                 <button
                   type="submit"
-                  className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-lg py-3 px-6 rounded-md hover:bg-purple-600 transition duration-300 shadow-lg w-full"
+                  className="w-full bg-blue-800 text-white font-bold py-3 px-6 rounded-md hover:bg-purple-700 transition duration-300 ease-in-out shadow-lg text-xl"
                 >
                   Update Name
                 </button>
@@ -315,7 +315,7 @@ function Teacher() {
               <div className="text-center">
                 <button
                   type="submit"
-                  className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-lg py-3 px-6 rounded-md hover:bg-purple-600 transition duration-300 shadow-lg w-full"
+                  className="w-full bg-blue-800 text-white font-bold py-3 px-6 rounded-md hover:bg-purple-700 transition duration-300 ease-in-out shadow-lg text-xl"
                 >
                   Update HOD
                 </button>

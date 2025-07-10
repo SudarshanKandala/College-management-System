@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from './context/AuthProvider';
+// import { AuthContext } from '../src/context/Authprovider.jsx'; // Import AuthContext
 import { useContext } from 'react';
 import axios from 'axios';
 
 function Student_1() {
   const navigate = useNavigate(); // Initialize useNavigate hook
-  const { accessToken } = useContext(AuthContext);
+  // const { accessToken } = useContext(AuthContext);
   const [payload, setPayload] = useState();
   const [stucour, setStucour] = useState([]);
   const [inst, setinstdata] = useState([]);
@@ -22,41 +22,40 @@ function Student_1() {
 
   // Decode the token and set payload
   useEffect(() => {
-    if (!accessToken) return; // If no token, don't fetch
     axios
-      .get("http://localhost:8080/decode_token", {
-        headers: { Authorization: `Bearer ${accessToken}` },
+      .get("http://localhost:8080/profile", {
+        withCredentials: true // 🧠 important to include cookies
       })
       .then((res) => {
-        setPayload(res.data); // Set the user data
+        setPayload(res.data); // ← decoded user info from req.user
       })
       .catch((err) => {
-        console.log("Error decoding token: ", err);
-        // Handle token decoding failure (e.g., navigate to login or handle state)
+        console.log("User not authenticated:", err);
+        // Optional: redirect to login or clear UI
       });
-  }, [accessToken]);
+  }, []);
 
   // Fetch students, student courses, and departments data
   useEffect(() => {
-    axios.get('http://localhost:8080/students')
+    axios.get('http://localhost:8080/students',{withCredentials: true})
       .then((response) => setStu(response.data))
       .catch((error) => console.log('Error fetching students: ', error));
 
-    axios.get('http://localhost:8080/stucour')
+    axios.get('http://localhost:8080/stucour',{withCredentials: true})
       .then((response) => setStucour(response.data))
       .catch((error) => console.log('Error fetching student courses: ', error));
 
-    axios.get('http://localhost:8080/department')
+    axios.get('http://localhost:8080/department',{withCredentials: true})
       .then((response) => setDept(response.data))
       .catch((error) => console.log('Error fetching departments: ', error));
 
     axios
-    .get('http://localhost:8080/instructor')
+    .get('http://localhost:8080/instructor',{withCredentials: true})
     .then((response) => setinstdata(response.data))
     .catch((error) => console.log('Error fetching data: ', error));
 
     axios
-      .get('http://localhost:8080/Courses')
+      .get('http://localhost:8080/Courses',{withCredentials: true})
       .then((response) => setcourse(response.data))
       .catch((error) => console.log('Error fetching data: ', error));
   }, []);
@@ -88,7 +87,7 @@ function Student_1() {
             console.log("Department ID: ", department.DepartnemtID);
 
             // Fetch messages directly inside the loop
-            axios.post("http://localhost:8080/messages", { did: department.DepartnemtID, cid: courseID })
+            axios.post("http://localhost:8080/messages", { did: department.DepartnemtID, cid: courseID },{withCredentials: true})
               .then((result) => {
                 // Check if result.data is already in messages before appending
                 const newMessages = result.data.filter((message) =>

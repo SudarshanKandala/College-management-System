@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from './context/AuthProvider';
+// import { AuthContext } from '../src/context/Authprovider.jsx'; // Import AuthContext
 import { useContext } from 'react';
 import axios from 'axios';
 
 function Teacher_1() {
   const navigate = useNavigate(); // Initialize useNavigate hook
-  const { accessToken } = useContext(AuthContext);
+  // const { payload } = useContext(AuthContext);
   // Logout function
   const [payload, setpayload] = useState();
   const [stucour, setstucour] = useState([]);
@@ -49,59 +49,58 @@ function Teacher_1() {
   // };
 
   useEffect(() => {
-    if (!accessToken) return; // If no token, don't fetch
     axios
-      .get("http://localhost:8080/decode_token", {
-        headers: { Authorization: `Bearer ${accessToken}` },
+      .get("http://localhost:8080/profile", {
+        withCredentials: true // 🧠 important to include cookies
       })
       .then((res) => {
-        setpayload(res.data); // Set the user data
+        setpayload(res.data); // ← decoded user info from req.user
       })
       .catch((err) => {
-        console.log("Error decoding token: ", err);
-        // Handle token decoding failure (e.g., navigate to login or handle state)
+        console.log("User not authenticated:", err);
+        // Optional: redirect to login or clear UI
       });
-  }, [accessToken]);
+  }, []);
 
   useEffect(() => {
-    if (!accessToken) return;
+    if (!payload) return;
     axios
-      .get('http://localhost:8080/stucour')
+      .get('http://localhost:8080/stucour',{withCredentials: true})
       .then((response) => setstucour(response.data))
       .catch((error) => console.log('Error fetching data: ', error));
-  }, [accessToken]);
+  }, [payload]);
 
   useEffect(() => {
-    if (!accessToken) return;
+    if (!payload) return;
     axios
-      .get('http://localhost:8080/instructor')
+      .get('http://localhost:8080/instructor',{withCredentials: true})
       .then((response) => setinstdata(response.data))
       .catch((error) => console.log('Error fetching data: ', error));
-  }, [accessToken]);
+  }, [payload]);
 
   useEffect(() => {
-    if (!accessToken) return;
+    if (!payload) return;
     axios
-      .get('http://localhost:8080/department')
+      .get('http://localhost:8080/department',{withCredentials: true})
       .then((response) => setdept(response.data))
       .catch((error) => console.log('Error fetching data: ', error));
-  }, [accessToken]);
+  }, [payload]);
 
   useEffect(() => {
-    if (!accessToken) return;
+    if (!payload) return;
     axios
-      .get('http://localhost:8080/Courses')
+      .get('http://localhost:8080/Courses',{withCredentials: true})
       .then((response) => setcourse(response.data))
       .catch((error) => console.log('Error fetching data: ', error));
-  }, [accessToken]);
+  }, [payload]);
 
   useEffect(() => {
-    if (!accessToken) return;
+    if (!payload) return;
     axios
-      .get('http://localhost:8080/students')
+      .get('http://localhost:8080/students',{withCredentials: true})
       .then((response) => setstu(response.data))
       .catch((error) => console.log('Error fetching data: ', error));
-  }, [accessToken]);
+  }, [payload]);
 
   const handleSubmitmark = async (e) => {
     e.preventDefault();
@@ -127,7 +126,7 @@ function Teacher_1() {
         rno1: rno1,
         cno1: cno1,
         marks: marks
-      });
+      },{withCredentials: true});
     }
     catch (error) {
       console.error('Error sending data: ', error);
@@ -157,7 +156,7 @@ function Teacher_1() {
         rno2: rno2,
         cno2: cno2,
         att: att
-      });
+      },{withCredentials: true});
       alert('attendance updated successfully!');
     }
     catch (error) {
@@ -210,7 +209,7 @@ function Teacher_1() {
     // console.log("from take attendance students: ",for_stu);
     try {
       confirm("Please Confirm!");
-      const response = await axios.post("http://localhost:8080/updateatt", { finalatt, for_stu, cid_for_att });
+      const response = await axios.post("http://localhost:8080/updateatt", { finalatt, for_stu, cid_for_att },{withCredentials: true});
     } catch (error) {
       console.log("error in posting data in Teacher_1 file and in take attendance function: ", error);
     }
