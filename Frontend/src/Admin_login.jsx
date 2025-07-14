@@ -133,7 +133,7 @@ function Admin_login() {
           Login
         </button>
 
-        <a href="http://localhost:8080/auth/google?role=admin" className="block">
+        <a href="http://localhost:8080/auth/google?role=Admin" className="block">
           <button
             type="button"
             className="bg-blue-800 text-white font-bold text-lg py-3 px-6 rounded-md hover:bg-blue-700 transition duration-300 shadow-md w-full"

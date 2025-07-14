@@ -15,7 +15,7 @@ import loginRouter from './routes/login.js';
 import cookieParser from "cookie-parser";
 import { authenticateJWT } from './routes/login.js';
 import session from "express-session";
-import './passport-setup.js'; // import the strategy config
+import './passport-setup.js' // import the strategy config
 import passport from "passport";
 
 const app = express();
@@ -29,7 +29,7 @@ app.use(cookieParser());
 app.use(loginRouter);
 
 app.use(session({
-  secret: 'some-secret-key',
+  secret: secretkey,
   resave: false,
   saveUninitialized: true
 }));
@@ -40,6 +40,7 @@ app.use(passport.session());
 // Google OAuth route
 app.get('/auth/google', (req, res, next) => {
   const role = req.query.role; // student/instructor/admin
+  console.log("Google auth request received for role:", role);
   const state = Buffer.from(JSON.stringify({ role })).toString('base64');
   passport.authenticate('google', {
     scope: ['profile', 'email'],
@@ -51,14 +52,16 @@ app.get('/auth/google', (req, res, next) => {
 
 // Google OAuth callback
 app.get('/auth/google/callback',
-  passport.authenticate('google', { session: false, failureRedirect: '/' }),
+  passport.authenticate('google', { session: false, failureRedirect: 'http://localhost:5173' }),
   (req, res) => {
+    console.log("Google auth callback received");
     const payload = {
-      username: req.user.StudentNumber || req.user.InstructorID || req.user.AdminID,
-      name: req.user.StudentName || req.user.InstructorName || req.user.AdminName,
-      email: req.user.Email,
+      username: req.user.id,
+      name: req.user.name,
+      email: req.user.email,
       user: req.user.user
     };
+    console.log("User info from Google auth:", req.user);
 
     const token = jwt.sign(payload, secretkey, { expiresIn: '10h' });
 
